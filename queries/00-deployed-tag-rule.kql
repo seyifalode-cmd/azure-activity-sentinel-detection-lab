@@ -1,0 +1,8 @@
+// Query configured in the enabled Microsoft Sentinel scheduled analytics rule.
+// It detects successful tag writes in the dedicated lab resource group.
+AzureActivity
+| where TimeGenerated > ago(1h)
+| where ActivityStatusValue == "Success"
+| where OperationNameValue contains "TAGS/WRITE"
+| where ResourceGroup =~ "rg-project3-sentinel-lab"
+| project TimeGenerated, OperationNameValue, ActivityStatusValue, ResourceGroup

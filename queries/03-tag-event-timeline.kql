@@ -1,0 +1,11 @@
+// Build a local event timeline around the confirmed tag test.
+// Replace the UTC bounds with the period being investigated. Keep output private until sanitized.
+let startTime = datetime(2026-10-12 04:00:00Z);
+let endTime = datetime(2026-10-12 05:00:00Z);
+AzureActivity
+| where TimeGenerated between (startTime .. endTime)
+| where ResourceGroup =~ "rg-project3-sentinel-lab"
+| project TimeGenerated, OperationNameValue, ActivityStatusValue, ActivitySubstatusValue,
+          Caller, CallerIpAddress, CorrelationId, EventDataId, ResourceId,
+          Authorization_d, Properties_d
+| sort by TimeGenerated asc

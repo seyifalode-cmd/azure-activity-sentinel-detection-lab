@@ -1,0 +1,4 @@
+// Check whether Azure management activity is arriving and determine actual coverage.
+AzureActivity
+| where TimeGenerated > ago(7d)
+| summarize TotalRecords=count(), EarliestRecord=min(TimeGenerated), LatestRecord=max(TimeGenerated)

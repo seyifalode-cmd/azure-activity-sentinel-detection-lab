@@ -1,0 +1,10 @@
+// Detection candidate: successful role-assignment writes.
+// Designed coverage: potential cloud role addition (MITRE ATT&CK T1098.003).
+// A match is a review trigger, not proof of malicious privilege escalation.
+AzureActivity
+| where TimeGenerated > ago(1h)
+| where OperationNameValue =~ "MICROSOFT.AUTHORIZATION/ROLEASSIGNMENTS/WRITE"
+| where ActivityStatusValue =~ "Success"
+| project TimeGenerated, Caller, CallerIpAddress, CorrelationId, EventDataId,
+          ResourceId, ResourceGroup, Authorization_d, Properties_d
+| sort by TimeGenerated desc

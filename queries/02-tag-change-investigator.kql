@@ -1,0 +1,11 @@
+// Investigate a tag write: actor, source IP, event correlation, target, and authorization context.
+// Compare Caller with the observed value and trusted identity records before attribution; formats may vary.
+// Properties_d and Claims_d may contain sensitive identifiers. Do not publish raw values.
+AzureActivity
+| where TimeGenerated > ago(7d)
+| where OperationNameValue =~ "MICROSOFT.RESOURCES/TAGS/WRITE"
+| where ActivityStatusValue =~ "Success"
+| project TimeGenerated, Caller, CallerIpAddress, CorrelationId, EventDataId,
+          OperationId, ActivityStatusValue, ResourceId, ResourceGroup,
+          Authorization_d, Properties_d
+| sort by TimeGenerated desc

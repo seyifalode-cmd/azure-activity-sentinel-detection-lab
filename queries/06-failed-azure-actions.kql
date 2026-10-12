@@ -1,0 +1,7 @@
+// Review terminal failures; do not treat every state other than Success as a failure.
+AzureActivity
+| where TimeGenerated > ago(7d)
+| where ActivityStatusValue =~ "Failure"
+| project TimeGenerated, OperationNameValue, ActivityStatusValue,
+          ActivitySubstatusValue, Caller, CorrelationId, ResourceId, ResourceGroup
+| sort by TimeGenerated desc

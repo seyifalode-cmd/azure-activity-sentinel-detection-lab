@@ -1,0 +1,14 @@
+// Detection candidate: successful deletion of selected high-impact Azure resources.
+// Designed coverage may align with MITRE ATT&CK T1485; an Azure delete is not automatically data destruction.
+AzureActivity
+| where TimeGenerated > ago(1h)
+| where ActivityStatusValue =~ "Success"
+| where OperationNameValue in~ (
+    "Microsoft.Resources/subscriptions/resourceGroups/delete",
+    "Microsoft.KeyVault/vaults/delete",
+    "Microsoft.Storage/storageAccounts/delete",
+    "Microsoft.Compute/virtualMachines/delete"
+)
+| project TimeGenerated, OperationNameValue, Caller, CallerIpAddress, CorrelationId,
+          EventDataId, ResourceId, ResourceGroup, Authorization_d, Properties_d
+| sort by TimeGenerated desc
